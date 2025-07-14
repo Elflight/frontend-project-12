@@ -10,5 +10,8 @@
     "postinstall": "cd frontend && npm ci"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@hexlet/chat-server": "^2.0.4"
+  }
 }

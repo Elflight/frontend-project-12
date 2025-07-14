@@ -1,5 +1,5 @@
 const PATHS = {
-  MAIN: '',
+  MAIN: '/',
   LOGIN: '/login',
   SIGNUP: '/signup',
 }
