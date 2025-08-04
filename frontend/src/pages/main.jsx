@@ -1,46 +1,130 @@
 import React from 'react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchChannels } from '../slices/channelsSlice'
-import { channelsSelectors } from '../slices/channelsSlice';
-import { messagesSelectors } from '../slices/messagesSlice';
-import { setCurrentChannelID } from '../slices/channelsSlice';
-import { Container, Row, Col, Button, Card, ListGroup, Form } from 'react-bootstrap';
+import { channelsSelectors } from '../slices/channelsSlice'
+import { messagesSelectors, addMessage } from '../slices/messagesSlice'
+import { setCurrentChannelID, selectCurrentChannel } from '../slices/channelsSlice'
+import { Container, Row, Col, Button, Card, ListGroup, Form, Dropdown } from 'react-bootstrap'
+import axios from 'axios'
+import socket from '../socket'
+
+import AddChannelModal from '../components/AddChannelModal'
+import RemoveChannelModal from '../components/RemoveChannelModal'
 
 
 const MainPage = () => {
   const dispatch = useDispatch()
 
+  const [message, setMessage] = useState('')
+  const [sending, setSending] = useState(false)
+  const [showAddModal, setShowAddModal] = useState(false)
+
+  const [showRemoveModal, setShowRemoveModal] = useState(false)
+  const [channelToRemove, setChannelToRemove] = useState(null)
+
+  const openRemoveModal = (id) => {
+    setChannelToRemove(id);
+    setShowRemoveModal(true);
+  };
+
+  const closeRemoveModal = () => {
+    setChannelToRemove(null);
+    setShowRemoveModal(false);
+  };
+
   useEffect(() => {
     dispatch(fetchChannels())
   }, [dispatch]);
 
+  useEffect(() => {
+    socket.on('newMessage', (msg) => {
+      dispatch(addMessage(msg));
+    });
+
+    return () => {
+      socket.off('newMessage'); // важно очищать
+    };
+  }, [dispatch]);
+
   const channels = useSelector(channelsSelectors.selectAll);
   const currentChannelId = useSelector((state) => state.channels.currentChannelId);
-  const currentChannel = channels.find((c) => c.id === currentChannelId);
+  const currentChannel = useSelector(selectCurrentChannel);
 
   const messages = useSelector(messagesSelectors.selectAll)
     .filter((m) => m.channelId === currentChannelId);
 
+  const token = useSelector((state) => state.auth.token);
+  const username = useSelector((state) => state.auth.username);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!message.trim()) return;
+
+    const newMessage = {
+      body: message,
+      channelId: currentChannelId,
+      username,
+    };
+
+    try {
+      setSending(true);
+      await axios.post('/api/v1/messages', newMessage, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setMessage('');
+    } catch (err) {
+      console.error('Ошибка отправки сообщения:', err);
+    } finally {
+      setSending(false);
+    }
+  };
+
 
     return (
+    <>
     <Container fluid className="h-100 p-3">
       <Row className="h-100">
         {/* Левая колонка — список каналов */}
         <Col xs={3} className="border-end">
           <div className="d-flex justify-content-between align-items-center mb-2">
             <b>Каналы</b>
-            <Button variant="outline-primary" size="sm">+</Button>
+            <Button variant="outline-primary" size="sm" onClick={() => setShowAddModal(true)}>+</Button>
           </div>
           <ListGroup>
             {channels.map((channel) => (
               <ListGroup.Item
+                className="d-flex justify-content-between align-items-center text-break"
                 key={channel.id}
                 active={channel.id === currentChannelId}
                 action
                 onClick={() => dispatch(setCurrentChannelID(channel.id))}
               >
-                #{channel.name}
+                <span className="me-2">#{channel.name}</span>
+                  {channel.removable && (
+                    <Dropdown onClick={(e) => e.stopPropagation()} align="end">
+                      <Dropdown.Toggle
+                        as="span"
+                        variant="light"
+                        size="sm"
+                        className="p-0 border-0 bg-transparent"
+                        id={`dropdown-${channel.id}`}
+                      >
+                        <span className="visually-hidden">Управление каналом</span>
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => console.log(`Переименовать канал ${channel.name}`)}>
+                          Переименовать
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => openRemoveModal(channel.id)}>
+                          Удалить
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  )}
               </ListGroup.Item>
             ))}
           </ListGroup>
@@ -55,19 +139,22 @@ const MainPage = () => {
 
           <div className="flex-grow-1 overflow-auto mb-3">
             {messages.map((msg) => (
-              <div key={msg.id} className="mb-2">
+              <div key={msg.id} className="mb-2 text-break">
                 <b>{msg.username}</b>: {msg.body}
               </div>
             ))}
           </div>
 
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Form.Group className="d-flex">
               <Form.Control
                 type="text"
                 placeholder="Введите сообщение..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                disabled={sending}
               />
-              <Button type="submit" variant="primary" className="ms-2">
+              <Button type="submit" variant="primary" className="ms-2" disabled={sending}>
                 &#10148;
               </Button>
             </Form.Group>
@@ -75,6 +162,9 @@ const MainPage = () => {
         </Col>
       </Row>
     </Container>
+    <AddChannelModal show={showAddModal} handleClose={() => setShowAddModal(false)} />
+    <RemoveChannelModal show={showRemoveModal} handleClose={closeRemoveModal} channelId={channelToRemove}/>
+    </>
   )
 }
 

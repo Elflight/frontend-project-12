@@ -31,6 +31,25 @@ export const fetchChannels = createAsyncThunk(
   }
 );
 
+export const removeChannelThunk = createAsyncThunk(
+  'channels/removeChannelThunk',
+  async (channelId, { getState, rejectWithValue }) => {
+    const token = getState().auth.token;
+
+    try {
+      await axios.delete(`/api/v1/channels/${channelId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return channelId;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || 'Failed to remove channel');
+    }
+  }
+);
+
 const channelSlice = createSlice({
     name: 'channels',
     initialState,
@@ -60,7 +79,15 @@ const channelSlice = createSlice({
       .addCase(fetchChannels.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(removeChannelThunk.fulfilled, (state, action) => {
+        const removedId = action.payload;
+        channelAdapter.removeOne(state, removedId);
+
+        if (state.currentChannelId === removedId) {
+            state.currentChannelId = 1
+        }
+    })
   },
 })
 
@@ -78,3 +105,7 @@ export default channelSlice.reducer
 //селекторы
 export const channelsSelectors = channelAdapter.getSelectors((state)=>state.channels)
 
+export const selectCurrentChannel = (state) => {
+  const id = state.channels.currentChannelId
+  return channelsSelectors.selectById(state, id) || null
+}
