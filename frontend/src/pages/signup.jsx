@@ -75,7 +75,7 @@ const SignupPage = () => {
 
               <Form onSubmit={formik.handleSubmit}>
                 <Form.Group className="mb-3" controlId="username">
-                  <Form.Label>{t('signup.username')}</Form.Label>
+                  <Form.Label className="fw-bold">{t('signup.username')}</Form.Label>
                   <Form.Control
                     type="text"
                     name="username"
@@ -91,7 +91,7 @@ const SignupPage = () => {
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="password">
-                  <Form.Label>{t('signup.password')}</Form.Label>
+                  <Form.Label className="fw-bold">{t('signup.password')}</Form.Label>
                   <Form.Control
                     type="password"
                     name="password"
@@ -107,7 +107,7 @@ const SignupPage = () => {
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="confirmPassword">
-                  <Form.Label>{t('signup.confirmPassword')}</Form.Label>
+                  <Form.Label className="fw-bold">{t('signup.confirmPassword')}</Form.Label>
                   <Form.Control
                     type="password"
                     name="confirmPassword"

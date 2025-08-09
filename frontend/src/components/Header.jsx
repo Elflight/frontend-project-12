@@ -21,7 +21,7 @@ const Header = () => {
   }
 
   return (
-    <Navbar bg="light" variant="light" className="shadow-sm mb-4">
+    <Navbar bg="white" variant="light" className="shadow-sm ">
       <Container>
         <Navbar.Brand as={Link} to="/">
           {t('header.title')}

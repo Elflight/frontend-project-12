@@ -116,16 +116,20 @@ const MainPage = () => {
 
   return (
     <>
-      <Container fluid className="h-100 p-3">
-        <Row className="h-100">
+      <Container className="h-100 my-4 overflow-hidden rounded shadow">
+        <Row className="h-100 bg-white flex-md-row">
           {/* Левая колонка — список каналов */}
-          <Col xs={3} className="border-end">
-            <div className="d-flex justify-content-between align-items-center mb-2">
+          <Col
+            xs={4}
+            md={2}
+            className="border-end px-0 bg-light flex-column h-100 d-flex"
+          >
+            <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
               <b>{t('chat.channels')}</b>
               <Button variant="outline-primary" size="sm" onClick={() => setShowAddModal(true)}>{t('chat.addChannel')}</Button>
             </div>
 
-            <ListGroup key={`channels-list-${currentChannelId}`}>
+            <ListGroup key={`channels-list-${currentChannelId}`} className='nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block'>
               {channels.map((channel) => {
               // console.log(`Rendering channel:`, channel.name, 'id:', channel.id, '=== current:', currentChannelId, channel.id === currentChannelId);
                 return (
@@ -166,34 +170,38 @@ const MainPage = () => {
           </Col>
 
           {/* Правая колонка — чат и форма */}
-          <Col xs={9} className="d-flex flex-column h-100">
-            <div className="mb-3">
-              <h5>#{currentChannel?.name}</h5>
-              <span className="text-muted">{t('chat.messages.count', { count: messages.length })}</span>
-            </div>
+          <Col className="p-0 h-100">
+            <div className="d-flex flex-column h-100">
+              <div className="bg-light mb-4 p-3 shadow-sm small">
+                <h5 className='m-0'>#{currentChannel?.name}</h5>
+                <span className="text-muted">{t('chat.messages.count', { count: messages.length })}</span>
+              </div>
 
-            <div className="flex-grow-1 overflow-auto mb-3">
-              {messages.map((msg) => (
-                <div key={msg.id} className="mb-2 text-break">
-                  <b>{msg.username}</b>: {msg.body}
-                </div>
-              ))}
-            </div>
+              <div className="chat-messages overflow-auto px-5">
+                {messages.map((msg) => (
+                  <div key={msg.id} className="mb-2 text-break">
+                    <b>{msg.username}</b>: {msg.body}
+                  </div>
+                ))}
+              </div>
 
-            <Form onSubmit={handleSubmit}>
-              <Form.Group className="d-flex">
-                <Form.Control
-                  type="text"
-                  placeholder={t('chat.message.placeholder')}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  disabled={sending}
-                />
-                <Button type="submit" variant="primary" className="ms-2" disabled={sending}>
-                  {t('chat.message.send')}
-                </Button>
-              </Form.Group>
-            </Form>
+              <div className='mt-auto px-5 py-3'>
+                <Form onSubmit={handleSubmit}>
+                  <Form.Group className="d-flex">
+                    <Form.Control
+                      type="text"
+                      placeholder={t('chat.message.placeholder')}
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      disabled={sending}
+                    />
+                    <Button type="submit" variant="primary" className="ms-2" disabled={sending}>
+                      {t('chat.message.send')}
+                    </Button>
+                  </Form.Group>
+                </Form>
+              </div>
+            </div>
           </Col>
         </Row>
       </Container>

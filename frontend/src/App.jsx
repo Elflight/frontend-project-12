@@ -18,44 +18,46 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Header />
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-      <Routes>
-        <Route
-          path={PATHS.MAIN}
-          element={
-            <ProtectedRoute>
-              <MainPage />
-            </ProtectedRoute>
-          } />
-        <Route
-          path={PATHS.LOGIN}
-          element={
-            <GuestRoute>
-              <LoginPage />
-            </GuestRoute>
-          } />
-        <Route
-          path={PATHS.SIGNUP}
-          element={
-            <GuestRoute>
-              <SignupPage />
-            </GuestRoute>
-          } />
-        <Route path="*" element={<NotfoundPage />} />
-      </Routes>
-    </BrowserRouter>
+    <div className="d-flex flex-column h-100">
+      <BrowserRouter>
+        <Header />
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+        <Routes>
+          <Route
+            path={PATHS.MAIN}
+            element={
+              <ProtectedRoute>
+                <MainPage />
+              </ProtectedRoute>
+            } />
+          <Route
+            path={PATHS.LOGIN}
+            element={
+              <GuestRoute>
+                <LoginPage />
+              </GuestRoute>
+            } />
+          <Route
+            path={PATHS.SIGNUP}
+            element={
+              <GuestRoute>
+                <SignupPage />
+              </GuestRoute>
+            } />
+          <Route path="*" element={<NotfoundPage />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   )
 }
 
