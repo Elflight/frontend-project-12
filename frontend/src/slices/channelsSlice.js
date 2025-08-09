@@ -1,5 +1,6 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { t } from 'i18next';
 import { fetchMessages } from './messagesSlice';
 
 const channelAdapter = createEntityAdapter();
@@ -26,7 +27,7 @@ export const fetchChannels = createAsyncThunk(
 
       return response.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data || 'Failed to fetch channels');
+      return rejectWithValue(err.response?.data || t('error.channel.noload'));
     }
   }
 );
@@ -45,7 +46,7 @@ export const removeChannelThunk = createAsyncThunk(
 
       return channelId;
     } catch (err) {
-      return rejectWithValue(err.response?.data || 'Failed to remove channel');
+      return rejectWithValue(err.response?.data || t('error.channel.remove'));
     }
   }
 );

@@ -4,6 +4,7 @@ import { Modal, Button, Form } from 'react-bootstrap'
 import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
+import { useTranslation } from 'react-i18next'
 import { addChannel, setCurrentChannelID, channelsSelectors } from '../slices/channelsSlice'
 
 const AddChannelModal = ({ show, handleClose }) => {
@@ -11,6 +12,7 @@ const AddChannelModal = ({ show, handleClose }) => {
     const inputRef = useRef(null)
     const token = useSelector((state) => state.auth.token)
     const existingNames = useSelector(channelsSelectors.selectAll).map((ch) => ch.name)
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (show && inputRef.current) {
@@ -21,10 +23,10 @@ const AddChannelModal = ({ show, handleClose }) => {
     const validationSchema = Yup.object({
         name: Yup.string()
         .trim()
-        .min(3, 'От 3 до 20 символов')
-        .max(20, 'От 3 до 20 символов')
-        .notOneOf(existingNames, 'Канал с таким именем уже существует')
-        .required('Обязательное поле'),
+        .min(3, t('validation.channel'))
+        .max(20, t('validation.channel'))
+        .notOneOf(existingNames, t('error.channel.exists'))
+        .required(t('validation.required')),
     })
 
     const handleSubmit = async (values, { setSubmitting, setErrors }) => {
@@ -40,7 +42,7 @@ const AddChannelModal = ({ show, handleClose }) => {
             dispatch(setCurrentChannelID(response.data.id))
             handleClose()
         } catch {
-            setErrors({ name: 'Ошибка при создании канала' })
+            setErrors({ name: t('error.channel.create') })
         } finally {
             setSubmitting(false)
         }
@@ -49,7 +51,7 @@ const AddChannelModal = ({ show, handleClose }) => {
     return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Новый канал</Modal.Title>
+        <Modal.Title>{t('modal.addChannel.title')}</Modal.Title>
       </Modal.Header>
       <Formik
         initialValues={{ name: '' }}
@@ -63,7 +65,7 @@ const AddChannelModal = ({ show, handleClose }) => {
                 <Field
                   name="name"
                   as={Form.Control}
-                  placeholder="Имя канала"
+                  placeholder={t('chat.channel.placeholder')}
                   ref={inputRef}
                   disabled={isSubmitting}
                 />
@@ -74,10 +76,10 @@ const AddChannelModal = ({ show, handleClose }) => {
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose} disabled={isSubmitting}>
-                Отмена
+                {t('modal.cancel')}
               </Button>
               <Button type="submit" variant="primary" disabled={isSubmitting}>
-                Создать
+                {t('chat.channel.submit')}
               </Button>
             </Modal.Footer>
           </FormikForm>

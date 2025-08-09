@@ -4,6 +4,7 @@ import { Modal, Button, Form } from 'react-bootstrap'
 import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
+import { useTranslation } from 'react-i18next'
 import {channelsSelectors, renameChannel } from '../slices/channelsSlice'
 
 const RenameChannelModal = ({ show, handleClose, channelId }) => {
@@ -11,6 +12,7 @@ const RenameChannelModal = ({ show, handleClose, channelId }) => {
     const inputRef = useRef(null)
     const token = useSelector((state) => state.auth.token)
     const existingNames = useSelector(channelsSelectors.selectAll).map((ch) => ch.name)
+    const { t } = useTranslation();
 
      // Находим текущий канал (может быть null)
     const currentChannel = useSelector(channelsSelectors.selectAll).find((ch) => ch.id === channelId)
@@ -29,10 +31,10 @@ const RenameChannelModal = ({ show, handleClose, channelId }) => {
     const validationSchema = Yup.object({
         name: Yup.string()
         .trim()
-        .min(3, 'От 3 до 20 символов')
-        .max(20, 'От 3 до 20 символов')
-        .notOneOf(existingNames, 'Канал с таким именем уже существует')
-        .required('Обязательное поле'),
+        .min(3, t('validation.channel'))
+        .max(20, t('validation.channel'))
+        .notOneOf(existingNames, t('error.channel.exists'))
+        .required(t('validation.required')),
     })
 
     const initialValues = {
@@ -51,7 +53,7 @@ const RenameChannelModal = ({ show, handleClose, channelId }) => {
             dispatch(renameChannel({ id: channelId, changes: { name: values.name.trim() } }))
             handleClose()
         } catch {
-            setErrors({ name: 'Ошибка при переименовании канала' })
+            setErrors({ name: t('error.channel.rename') })
         } finally {
             setSubmitting(false)
         }
@@ -60,7 +62,7 @@ const RenameChannelModal = ({ show, handleClose, channelId }) => {
     return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Переименование канала</Modal.Title>
+        <Modal.Title>{t('modal.renameChannel.title')}</Modal.Title>
       </Modal.Header>
       <Formik
         initialValues={initialValues}
@@ -75,7 +77,7 @@ const RenameChannelModal = ({ show, handleClose, channelId }) => {
                 <Field
                   name="name"
                   as={Form.Control}
-                  placeholder="Имя канала"
+                  placeholder={t('chat.channel.placeholder')}
                   ref={inputRef}
                   disabled={isSubmitting}
                 />
@@ -86,10 +88,10 @@ const RenameChannelModal = ({ show, handleClose, channelId }) => {
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose} disabled={isSubmitting}>
-                Отмена
+                {t('modal.cancel')}
               </Button>
               <Button type="submit" variant="primary" disabled={isSubmitting}>
-                Применить
+                {t('modal.renameChannel.submit')}
               </Button>
             </Modal.Footer>
           </FormikForm>

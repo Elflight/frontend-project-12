@@ -8,6 +8,7 @@ import { setCurrentChannelID, selectCurrentChannel } from '../slices/channelsSli
 import { Container, Row, Col, Button, Card, ListGroup, Form, Dropdown } from 'react-bootstrap'
 import axios from 'axios'
 import socket from '../socket'
+import { useTranslation } from 'react-i18next'
 
 import AddChannelModal from '../components/AddChannelModal'
 import RemoveChannelModal from '../components/RemoveChannelModal'
@@ -16,6 +17,7 @@ import RenameChannelModal from '../components/RenameChannelModal'
 
 const MainPage = () => {
   const dispatch = useDispatch()
+  const { t } = useTranslation();
 
   const [message, setMessage] = useState('')
   const [sending, setSending] = useState(false)
@@ -91,7 +93,7 @@ const MainPage = () => {
       });
       setMessage('');
     } catch (err) {
-      console.error('Ошибка отправки сообщения:', err);
+      console.error(t('error.message.send'), err);
     } finally {
       setSending(false);
     }
@@ -105,8 +107,8 @@ const MainPage = () => {
         {/* Левая колонка — список каналов */}
         <Col xs={3} className="border-end">
           <div className="d-flex justify-content-between align-items-center mb-2">
-            <b>Каналы</b>
-            <Button variant="outline-primary" size="sm" onClick={() => setShowAddModal(true)}>+</Button>
+            <b>{t('chat.channels')}</b>
+            <Button variant="outline-primary" size="sm" onClick={() => setShowAddModal(true)}>{t('chat.addChannel')}</Button>
           </div>
           
           <ListGroup key={`channels-list-${currentChannelId}`}>
@@ -130,15 +132,15 @@ const MainPage = () => {
                         className="p-0 border-0 bg-transparent"
                         id={`dropdown-${channel.id}`}
                       >
-                        <span className="visually-hidden">Управление каналом</span>
+                        <span className="visually-hidden">{t('chat.channel.actions')}</span>
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu>
                         <Dropdown.Item onClick={() => openRenameModal(channel.id)}>
-                          Переименовать
+                          {t('chat.channel.rename')}
                         </Dropdown.Item>
                         <Dropdown.Item onClick={() => openRemoveModal(channel.id)}>
-                          Удалить
+                          {t('chat.channel.remove')}
                         </Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>
@@ -153,7 +155,7 @@ const MainPage = () => {
         <Col xs={9} className="d-flex flex-column h-100">
           <div className="mb-3">
             <h5>#{currentChannel?.name}</h5>
-            <span className="text-muted">{messages.length} сообщений</span>
+            <span className="text-muted">{t('chat.messages.count', { count: messages.length })}</span>
           </div>
 
           <div className="flex-grow-1 overflow-auto mb-3">
@@ -168,13 +170,13 @@ const MainPage = () => {
             <Form.Group className="d-flex">
               <Form.Control
                 type="text"
-                placeholder="Введите сообщение..."
+                placeholder={t('chat.message.placeholder')}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 disabled={sending}
               />
               <Button type="submit" variant="primary" className="ms-2" disabled={sending}>
-                &#10148;
+                {t('chat.message.send')}
               </Button>
             </Form.Group>
           </Form>

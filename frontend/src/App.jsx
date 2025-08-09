@@ -7,14 +7,16 @@ import SignupPage from './pages/signup.jsx'
 import MainPage from './pages/main.jsx'
 import NotfoundPage from './pages/notfound.jsx'
 
-import ProtectedRoute from './components/ProtectedRoute.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx'
 import GuestRoute from './components/GuestRoute.jsx'
+import Header from './components/Header.jsx';
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
   return (
     <BrowserRouter>
+      <Header />
       <Routes>
         <Route 
         path={PATHS.MAIN} 

@@ -1,10 +1,12 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next'
 import { removeChannelThunk } from '../slices/channelsSlice';
 
 const RemoveChannelModal = ({ show, handleClose, channelId }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const handleRemove = async () => {
     await dispatch(removeChannelThunk(channelId));
@@ -14,15 +16,15 @@ const RemoveChannelModal = ({ show, handleClose, channelId }) => {
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Удалить канал?</Modal.Title>
+        <Modal.Title>{t('modal.removeChannel.title')}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>Вы уверены, что хотите удалить этот канал?</Modal.Body>
+      <Modal.Body>{t('modal.removeChannel.body')}</Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
-          Отмена
+          {t('modal.cancel')}
         </Button>
         <Button variant="danger" onClick={handleRemove}>
-          Удалить
+          {t('modal.removeChannel.confirm')}
         </Button>
       </Modal.Footer>
     </Modal>

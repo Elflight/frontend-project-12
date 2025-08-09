@@ -1,7 +1,14 @@
+import { useTranslation } from 'react-i18next'
+
 const NotfoundPage = () => {
-    return (
+  const { t } = useTranslation();
+
+  return (
     <>
-      404 page not found
+    <h2>404 page not found</h2>
+    <p>{t('page.notFound')}</p>
+    <p>{t('page.notFound.text')}</p>
+    <p><a href="/">{t('page.notFound.link')}</a></p>
     </>
   )
 }

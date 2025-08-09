@@ -1,5 +1,6 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { t } from 'i18next';
 import { removeChannelThunk } from './channelsSlice';
 
 const messagesAdapter = createEntityAdapter();
@@ -22,7 +23,7 @@ export const fetchMessages = createAsyncThunk(
       console.log(response);
       return response.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data || 'Failed to fetch messages');
+      return rejectWithValue(err.response?.data || t('error.message.noload'));
     }
   }
 );
