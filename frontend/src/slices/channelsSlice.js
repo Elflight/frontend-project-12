@@ -83,9 +83,9 @@ const channelSlice = createSlice({
       .addCase(removeChannelThunk.fulfilled, (state, action) => {
         const removedId = action.payload;
         channelAdapter.removeOne(state, removedId);
-
+        
         if (state.currentChannelId === removedId) {
-            state.currentChannelId = 1
+          state.currentChannelId = 1;
         }
     })
   },

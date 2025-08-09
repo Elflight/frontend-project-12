@@ -11,6 +11,7 @@ import socket from '../socket'
 
 import AddChannelModal from '../components/AddChannelModal'
 import RemoveChannelModal from '../components/RemoveChannelModal'
+import RenameChannelModal from '../components/RenameChannelModal'
 
 
 const MainPage = () => {
@@ -23,6 +24,9 @@ const MainPage = () => {
   const [showRemoveModal, setShowRemoveModal] = useState(false)
   const [channelToRemove, setChannelToRemove] = useState(null)
 
+  const [showRenameModal, setShowRenameModal] = useState(false)
+  const [channelToRename, setChannelToRename] = useState(null)
+
   const openRemoveModal = (id) => {
     setChannelToRemove(id);
     setShowRemoveModal(true);
@@ -31,6 +35,16 @@ const MainPage = () => {
   const closeRemoveModal = () => {
     setChannelToRemove(null);
     setShowRemoveModal(false);
+  };
+
+  const openRenameModal = (id) => {
+    setChannelToRename(id);
+    setShowRenameModal(true);
+  };
+
+  const closeRenameModal = () => {
+    setChannelToRename(null);
+    setShowRenameModal(false);
   };
 
   useEffect(() => {
@@ -48,14 +62,15 @@ const MainPage = () => {
   }, [dispatch]);
 
   const channels = useSelector(channelsSelectors.selectAll);
-  const currentChannelId = useSelector((state) => state.channels.currentChannelId);
   const currentChannel = useSelector(selectCurrentChannel);
-
+  const currentChannelId = useSelector((state) => state.channels.currentChannelId);
+  
   const messages = useSelector(messagesSelectors.selectAll)
-    .filter((m) => m.channelId === currentChannelId);
-
+  .filter((m) => m.channelId === currentChannelId);
+  
   const token = useSelector((state) => state.auth.token);
   const username = useSelector((state) => state.auth.username);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,12 +108,15 @@ const MainPage = () => {
             <b>Каналы</b>
             <Button variant="outline-primary" size="sm" onClick={() => setShowAddModal(true)}>+</Button>
           </div>
-          <ListGroup>
-            {channels.map((channel) => (
+          
+          <ListGroup key={`channels-list-${currentChannelId}`}>
+            {channels.map((channel) => {
+              // console.log(`Rendering channel:`, channel.name, 'id:', channel.id, '=== current:', currentChannelId, channel.id === currentChannelId);
+              return (
               <ListGroup.Item
                 className="d-flex justify-content-between align-items-center text-break"
                 key={channel.id}
-                active={channel.id === currentChannelId}
+                active={Number(channel.id) === Number(currentChannelId)}
                 action
                 onClick={() => dispatch(setCurrentChannelID(channel.id))}
               >
@@ -116,7 +134,7 @@ const MainPage = () => {
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu>
-                        <Dropdown.Item onClick={() => console.log(`Переименовать канал ${channel.name}`)}>
+                        <Dropdown.Item onClick={() => openRenameModal(channel.id)}>
                           Переименовать
                         </Dropdown.Item>
                         <Dropdown.Item onClick={() => openRemoveModal(channel.id)}>
@@ -126,7 +144,8 @@ const MainPage = () => {
                     </Dropdown>
                   )}
               </ListGroup.Item>
-            ))}
+              )
+            })}
           </ListGroup>
         </Col>
 
@@ -164,6 +183,7 @@ const MainPage = () => {
     </Container>
     <AddChannelModal show={showAddModal} handleClose={() => setShowAddModal(false)} />
     <RemoveChannelModal show={showRemoveModal} handleClose={closeRemoveModal} channelId={channelToRemove}/>
+    <RenameChannelModal show={showRenameModal} handleClose={closeRenameModal} channelId={channelToRename}/>
     </>
   )
 }

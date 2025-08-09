@@ -1,6 +1,6 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { removeChannel } from './channelsSlice';
+import { removeChannelThunk } from './channelsSlice';
 
 const messagesAdapter = createEntityAdapter();
 
@@ -49,7 +49,7 @@ const messageSlice = createSlice({
           state.error = action.payload;
         })
 
-        .addCase(removeChannel, (state, action) => {
+        .addCase(removeChannelThunk.fulfilled, (state, action) => {
           const removedChannelId = action.payload;
           const messagesToRemove = Object.values(state.entities)
             .filter((message) => message.channelId === removedChannelId)

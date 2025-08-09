@@ -4,19 +4,27 @@ import { Modal, Button, Form } from 'react-bootstrap'
 import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
-import { addChannel, setCurrentChannelID, channelsSelectors } from '../slices/channelsSlice'
+import {channelsSelectors, renameChannel } from '../slices/channelsSlice'
 
-const AddChannelModal = ({ show, handleClose }) => {
+const RenameChannelModal = ({ show, handleClose, channelId }) => {
     const dispatch = useDispatch()
     const inputRef = useRef(null)
     const token = useSelector((state) => state.auth.token)
     const existingNames = useSelector(channelsSelectors.selectAll).map((ch) => ch.name)
+
+     // Находим текущий канал (может быть null)
+    const currentChannel = useSelector(channelsSelectors.selectAll).find((ch) => ch.id === channelId)
 
     useEffect(() => {
         if (show && inputRef.current) {
             inputRef.current.focus()
         }
     }, [show])
+
+    // Возврат, если channelId null или канал не найден
+    if (!channelId || !currentChannel) {
+        return null
+    }
 
     const validationSchema = Yup.object({
         name: Yup.string()
@@ -27,20 +35,23 @@ const AddChannelModal = ({ show, handleClose }) => {
         .required('Обязательное поле'),
     })
 
+    const initialValues = {
+        name: currentChannel.name || ''
+    }
+
     const handleSubmit = async (values, { setSubmitting, setErrors }) => {
         try {
-            const response = await axios.post(
-                '/api/v1/channels',
+            await axios.patch(
+                `/api/v1/channels/${channelId}`,
                 { name: values.name.trim() },
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
             )
-            dispatch(addChannel(response.data))
-            dispatch(setCurrentChannelID(response.data.id))
+            dispatch(renameChannel({ id: channelId, changes: { name: values.name.trim() } }))
             handleClose()
         } catch {
-            setErrors({ name: 'Ошибка при создании канала' })
+            setErrors({ name: 'Ошибка при переименовании канала' })
         } finally {
             setSubmitting(false)
         }
@@ -49,12 +60,13 @@ const AddChannelModal = ({ show, handleClose }) => {
     return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Новый канал</Modal.Title>
+        <Modal.Title>Переименование канала</Modal.Title>
       </Modal.Header>
       <Formik
-        initialValues={{ name: '' }}
+        initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
+        enableReinitialize={true} // Важно для обновления initialValues при смене channelId
       >
         {({ isSubmitting }) => (
           <FormikForm>
@@ -77,7 +89,7 @@ const AddChannelModal = ({ show, handleClose }) => {
                 Отмена
               </Button>
               <Button type="submit" variant="primary" disabled={isSubmitting}>
-                Создать
+                Применить
               </Button>
             </Modal.Footer>
           </FormikForm>
@@ -87,4 +99,4 @@ const AddChannelModal = ({ show, handleClose }) => {
   )
 }
 
-export default AddChannelModal
+export default RenameChannelModal
