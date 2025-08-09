@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "proxy": "http://localhost:5001",
   "scripts": {
     "dev": "vite",
     "start": "npx start-server -s ./dist",
@@ -12,7 +11,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@hexlet/chat-server": "^2.0.4",
     "@reduxjs/toolkit": "^2.8.2",
     "axios": "^1.10.0",
     "bootstrap": "^5.3.7",
