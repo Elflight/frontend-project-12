@@ -30,7 +30,7 @@ const resources = {
       'signup.submit': 'Зарегистрироваться',
       'signup.hasAccount': 'Уже есть аккаунт?',
       'signup.loginLink': 'Войти',
-      'signup.error.exists': 'Пользователь с таким именем уже существует',
+      'signup.error.exists': 'Такой пользователь уже существует',
       'signup.error.general': 'Ошибка при регистрации. Попробуйте еще раз.',
 
       // Валидация форм
