@@ -1,19 +1,19 @@
-import React from 'react';
-import { Modal, Button } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import React from 'react'
+import { Modal, Button } from 'react-bootstrap'
+import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
-import { removeChannelThunk } from '../slices/channelsSlice';
+import { removeChannelThunk } from '../slices/channelsSlice'
 
 const RemoveChannelModal = ({ show, handleClose, channelId }) => {
-  const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const dispatch = useDispatch()
+  const { t } = useTranslation()
 
   const handleRemove = async () => {
-    await dispatch(removeChannelThunk(channelId));
-    toast.success(t('chat.channel.delete.success'));
-    handleClose();
-  };
+    await dispatch(removeChannelThunk(channelId))
+    toast.success(t('chat.channel.delete.success'))
+    handleClose()
+  }
 
   return (
     <Modal show={show} onHide={handleClose} centered>
@@ -30,7 +30,7 @@ const RemoveChannelModal = ({ show, handleClose, channelId }) => {
         </Button>
       </Modal.Footer>
     </Modal>
-  );
-};
+  )
+}
 
-export default RemoveChannelModal;
+export default RemoveChannelModal

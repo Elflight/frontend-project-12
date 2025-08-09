@@ -14,12 +14,11 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
 
-
 const LoginPage = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [authError, setAuthError] = useState(null)
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const formik = useFormik({
     initialValues: {
@@ -29,14 +28,14 @@ const LoginPage = () => {
     onSubmit: async (values, { setSubmitting }) => {
       try {
         const response = await axios.post('/api/v1/login', values)
-        dispatch(login(response.data));
-        navigate('/');
+        dispatch(login(response.data))
+        navigate('/')
       } catch {
-        setAuthError(t('login.error'));
+        setAuthError(t('login.error'))
       } finally {
         setSubmitting(false)
       }
-    }
+    },
   })
 
   return (

@@ -10,15 +10,15 @@ import Nav from 'react-bootstrap/Nav'
 import Button from 'react-bootstrap/Button'
 
 const Header = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const isAuthorized = useSelector((state) => state.auth.isAuthorized);
-  const { t } = useTranslation();
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const isAuthorized = useSelector((state) => state.auth.isAuthorized)
+  const { t } = useTranslation()
 
   const handleLogout = () => {
-    dispatch(logout());
-    navigate('/login');
-  };
+    dispatch(logout())
+    navigate('/login')
+  }
 
   return (
     <Navbar bg="light" variant="light" className="shadow-sm mb-4">
@@ -26,11 +26,11 @@ const Header = () => {
         <Navbar.Brand as={Link} to="/">
           {t('header.title')}
         </Navbar.Brand>
-        
+
         <Nav className="ms-auto">
           {isAuthorized && (
-            <Button 
-              variant="outline-primary" 
+            <Button
+              variant="outline-primary"
               onClick={handleLogout}
               size="sm"
             >
@@ -40,7 +40,7 @@ const Header = () => {
         </Nav>
       </Container>
     </Navbar>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

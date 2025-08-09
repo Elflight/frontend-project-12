@@ -9,49 +9,49 @@ import { toast } from 'react-toastify'
 import { addChannel, setCurrentChannelID, channelsSelectors } from '../slices/channelsSlice'
 
 const AddChannelModal = ({ show, handleClose }) => {
-    const dispatch = useDispatch()
-    const inputRef = useRef(null)
-    const token = useSelector((state) => state.auth.token)
-    const existingNames = useSelector(channelsSelectors.selectAll).map((ch) => ch.name)
-    const { t } = useTranslation();
+  const dispatch = useDispatch()
+  const inputRef = useRef(null)
+  const token = useSelector((state) => state.auth.token)
+  const existingNames = useSelector(channelsSelectors.selectAll).map((ch) => ch.name)
+  const { t } = useTranslation()
 
-    useEffect(() => {
-        if (show && inputRef.current) {
-            inputRef.current.focus()
-        }
-    }, [show])
-
-    const validationSchema = Yup.object({
-        name: Yup.string()
-        .trim()
-        .min(3, t('validation.channel'))
-        .max(20, t('validation.channel'))
-        .notOneOf(existingNames, t('error.channel.exists'))
-        .required(t('validation.required')),
-    })
-
-    const handleSubmit = async (values, { setSubmitting, setErrors }) => {
-        try {
-            const response = await axios.post(
-                '/api/v1/channels',
-                { name: values.name.trim() },
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
-            )
-            dispatch(addChannel(response.data))
-            dispatch(setCurrentChannelID(response.data.id))
-            toast.success(t('chat.channel.create.success'));
-            handleClose()
-        } catch {
-          toast.error(t('error.channel.create'))
-          setErrors({ name: t('error.channel.create') })
-        } finally {
-            setSubmitting(false)
-        }
+  useEffect(() => {
+    if (show && inputRef.current) {
+      inputRef.current.focus()
     }
+  }, [show])
 
-    return (
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .trim()
+      .min(3, t('validation.channel'))
+      .max(20, t('validation.channel'))
+      .notOneOf(existingNames, t('error.channel.exists'))
+      .required(t('validation.required')),
+  })
+
+  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+    try {
+      const response = await axios.post(
+        '/api/v1/channels',
+        { name: values.name.trim() },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      )
+      dispatch(addChannel(response.data))
+      dispatch(setCurrentChannelID(response.data.id))
+      toast.success(t('chat.channel.create.success'))
+      handleClose()
+    } catch {
+      toast.error(t('error.channel.create'))
+      setErrors({ name: t('error.channel.create') })
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>{t('modal.addChannel.title')}</Modal.Title>

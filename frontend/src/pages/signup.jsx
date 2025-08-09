@@ -16,10 +16,10 @@ import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
 
 const SignupPage = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [signupError, setSignupError] = useState(null)
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const validationSchema = Yup.object({
     username: Yup.string()
@@ -31,7 +31,7 @@ const SignupPage = () => {
       .min(6, t('validation.password.min')),
     confirmPassword: Yup.string()
       .required(t('validation.required'))
-      .oneOf([Yup.ref('password'), null], t('validation.passwords.match'))
+      .oneOf([Yup.ref('password'), null], t('validation.passwords.match')),
   })
 
   const formik = useFormik({
@@ -43,24 +43,24 @@ const SignupPage = () => {
     validationSchema: validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        setSignupError(null);
+        setSignupError(null)
         const response = await axios.post('/api/v1/signup', {
           username: values.username,
-          password: values.password
-        });
+          password: values.password,
+        })
         // После успешной регистрации - логиним пользователя и редиректим на чат
-        dispatch(login(response.data));
-        navigate('/');
+        dispatch(login(response.data))
+        navigate('/')
       } catch (error) {
         if (error.response?.status === 409) {
-          setSignupError(t('signup.error.exists'));
+          setSignupError(t('signup.error.exists'))
         } else {
-          setSignupError(t('signup.error.general'));
+          setSignupError(t('signup.error.general'))
         }
       } finally {
         setSubmitting(false)
       }
-    }
+    },
   })
 
   return (

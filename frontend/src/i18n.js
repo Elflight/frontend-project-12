@@ -1,5 +1,5 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import i18n from 'i18next'
+import { initReactI18next } from 'react-i18next'
 
 const resources = {
   ru: {
@@ -7,7 +7,7 @@ const resources = {
       // Навигация и хедер
       'header.title': 'Hexlet Chat',
       'header.logout': 'Выйти',
-      
+
       // Формы авторизации
       'login.title': 'Войти',
       'login.username': 'Ваш ник',
@@ -18,7 +18,7 @@ const resources = {
       'login.noAccount': 'Нет аккаунта?',
       'login.signupLink': 'Зарегистрироваться',
       'login.error': 'Неверные имя пользователя или пароль',
-      
+
       // Формы регистрации
       'signup.title': 'Регистрация',
       'signup.username': 'Имя пользователя',
@@ -32,7 +32,7 @@ const resources = {
       'signup.loginLink': 'Войти',
       'signup.error.exists': 'Пользователь с таким именем уже существует',
       'signup.error.general': 'Ошибка при регистрации. Попробуйте еще раз.',
-      
+
       // Валидация форм
       'validation.required': 'Обязательное поле',
       'validation.username.min': 'Имя пользователя должно быть не менее 3 символов',
@@ -40,7 +40,7 @@ const resources = {
       'validation.password.min': 'Пароль должен быть не менее 6 символов',
       'validation.passwords.match': 'Пароли должны совпадать',
       'validation.channel': 'От 3 до 20 символов',
-      
+
       // Чат
       'chat.channels': 'Каналы',
       'chat.addChannel': '+',
@@ -49,17 +49,17 @@ const resources = {
       'chat.channel.remove': 'Удалить',
       'chat.messages.count_zero': 'Нет сообщений',
       'chat.messages.count_one': '{{count}} сообщение',
-    'chat.messages.count_few': '{{count}} сообщения',
-    'chat.messages.count_many': '{{count}} сообщений',
-    'chat.messages.count_other': '{{count}} сообщений',
-    'chat.message.placeholder': 'Введите сообщение...',
-    'chat.message.send': '➤',
-    'chat.channel.placeholder': 'имя канала',
-    'chat.channel.cancel': 'Отмена',
-    'chat.channel.submit': 'Создать',
-    'chat.channel.create.success': 'Канал успешно создан!',
-    'chat.channel.delete.success': 'Канал успешно удален!',
-    'chat.channel.rename.success': 'Канал успешно переименован!',
+      'chat.messages.count_few': '{{count}} сообщения',
+      'chat.messages.count_many': '{{count}} сообщений',
+      'chat.messages.count_other': '{{count}} сообщений',
+      'chat.message.placeholder': 'Введите сообщение...',
+      'chat.message.send': '➤',
+      'chat.channel.placeholder': 'имя канала',
+      'chat.channel.cancel': 'Отмена',
+      'chat.channel.submit': 'Создать',
+      'chat.channel.create.success': 'Канал успешно создан!',
+      'chat.channel.delete.success': 'Канал успешно удален!',
+      'chat.channel.rename.success': 'Канал успешно переименован!',
 
       // Модальные окна
       'modal.addChannel.title': 'Новый канал',
@@ -69,7 +69,7 @@ const resources = {
       'modal.renameChannel.title': 'Переименование канала',
       'modal.renameChannel.submit': 'Применить',
       'modal.cancel': 'Отмена',
-      
+
       // Ошибки
       'error.channel.noload': 'Ошибка загрузки каналов',
       'error.channel.exists': 'Канал с таким именем уже существует',
@@ -78,7 +78,7 @@ const resources = {
       'error.channel.rename': 'Ошибка при переименовании канала',
       'error.message.noload': 'Ошибка загрузки сообщений',
       'error.message.send': 'Ошибка отправки сообщения',
-      
+
       // Страницы
       'page.notFound': 'Страница не найдена',
       'page.notFound.text': 'Вы можете перейти на главную страницу',
@@ -86,18 +86,18 @@ const resources = {
 
       //Сетевые ошибки
       'error.network.offline': 'Нет подключения к интернету',
-    'error.network.connection': 'Ошибка подключения к серверу',
-    'error.auth.unauthorized': 'Ошибка авторизации. Пожалуйста, войдите снова',
-    'error.auth.forbidden': 'Доступ запрещен',
-    'error.api.notFound': 'Ресурс не найден',
-    'error.api.server': 'Ошибка сервера. Попробуйте позже',
-    'error.api.general': 'Произошла ошибка. Попробуйте позже',
-    'error.socket.connection': 'Ошибка соединения. Переподключение...',
-    'error.channel.load': 'Ошибка загрузки каналов',
-    'error.messages.load': 'Ошибка загрузки сообщений',
-    }
-  }
-};
+      'error.network.connection': 'Ошибка подключения к серверу',
+      'error.auth.unauthorized': 'Ошибка авторизации. Пожалуйста, войдите снова',
+      'error.auth.forbidden': 'Доступ запрещен',
+      'error.api.notFound': 'Ресурс не найден',
+      'error.api.server': 'Ошибка сервера. Попробуйте позже',
+      'error.api.general': 'Произошла ошибка. Попробуйте позже',
+      'error.socket.connection': 'Ошибка соединения. Переподключение...',
+      'error.channel.load': 'Ошибка загрузки каналов',
+      'error.messages.load': 'Ошибка загрузки сообщений',
+    },
+  },
+}
 
 i18n
   .use(initReactI18next)
@@ -106,8 +106,8 @@ i18n
     lng: 'ru',
     fallbackLng: 'ru',
     interpolation: {
-      escapeValue: false // react already safes from xss
-    }
-  });
+      escapeValue: false, // react already safes from xss
+    },
+  })
 
-export default i18n;
+export default i18n
