@@ -16,7 +16,7 @@ const resources = {
       'login.passwordPlaceholder': 'Введите пароль',
       'login.submit': 'Войти',
       'login.noAccount': 'Нет аккаунта?',
-      'login.signupLink': 'Зарегистрироваться',
+      'login.signupLink': 'Регистрация',
       'login.error': 'Неверные имя пользователя или пароль',
 
       // Формы регистрации
