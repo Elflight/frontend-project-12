@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { login } from '../slices/authSlice'
 import axios from 'axios'
 import { useTranslation } from 'react-i18next'
+import { useRollbar } from '@rollbar/react'
 
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -19,6 +20,7 @@ const LoginPage = () => {
   const navigate = useNavigate()
   const [authError, setAuthError] = useState(null)
   const { t } = useTranslation()
+  const rollbar = useRollbar()
 
   const formik = useFormik({
     initialValues: {
@@ -32,6 +34,7 @@ const LoginPage = () => {
         navigate('/')
       } catch {
         setAuthError(t('login.error'))
+        rollbar.error(t('login.error'))
       } finally {
         setSubmitting(false)
       }

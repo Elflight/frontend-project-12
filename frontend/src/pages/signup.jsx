@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { login } from '../slices/authSlice'
 import axios from 'axios'
 import { useTranslation } from 'react-i18next'
+import { useRollbar } from '@rollbar/react'
 
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -20,6 +21,7 @@ const SignupPage = () => {
   const navigate = useNavigate()
   const [signupError, setSignupError] = useState(null)
   const { t } = useTranslation()
+  const rollbar = useRollbar()
 
   const validationSchema = Yup.object({
     username: Yup.string()
@@ -54,8 +56,10 @@ const SignupPage = () => {
       } catch (error) {
         if (error.response?.status === 409) {
           setSignupError(t('signup.error.exists'))
+          rollbar.error(t('signup.error.exists'))
         } else {
           setSignupError(t('signup.error.general'))
+          rollbar.error(t('signup.error.general'))
         }
       } finally {
         setSubmitting(false)
