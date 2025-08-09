@@ -1,6 +1,8 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { t } from 'i18next';
+import { handleApiError } from '../utils/errorHandler';
+import { cleanProfanity } from '../utils/profanityFilter';
 import { removeChannelThunk } from './channelsSlice';
 
 const messagesAdapter = createEntityAdapter();
@@ -23,6 +25,7 @@ export const fetchMessages = createAsyncThunk(
       console.log(response);
       return response.data;
     } catch (err) {
+      handleApiError(err, t('error.message.noload'));
       return rejectWithValue(err.response?.data || t('error.message.noload'));
     }
   }
@@ -32,8 +35,20 @@ const messageSlice = createSlice({
     name: 'messages',
     initialState,
     reducers: {
-        setAllMessages: messagesAdapter.setAll,
-        addMessage: messagesAdapter.addOne,
+        setAllMessages: (state, action) => {
+            const cleanedMessages = action.payload.map(msg => ({
+                ...msg,
+                body: cleanProfanity(msg.body)
+            }));
+            messagesAdapter.setAll(state, cleanedMessages);
+        },
+        addMessage: (state, action) => {
+            const cleanedMessage = {
+                ...action.payload,
+                body: cleanProfanity(action.payload.body)
+            };
+            messagesAdapter.addOne(state, cleanedMessage);
+        },
     },
     extraReducers: (builder) => {
       builder
@@ -43,7 +58,11 @@ const messageSlice = createSlice({
         })
         .addCase(fetchMessages.fulfilled, (state, action) => {
           state.loading = false;
-          messagesAdapter.setAll(state, action.payload);
+          const cleanedMessages = action.payload.map(msg => ({
+              ...msg,
+              body: cleanProfanity(msg.body)
+          }));
+          messagesAdapter.setAll(state, cleanedMessages);
         })
         .addCase(fetchMessages.rejected, (state, action) => {
           state.loading = false;

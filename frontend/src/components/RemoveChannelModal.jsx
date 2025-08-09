@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
 import { removeChannelThunk } from '../slices/channelsSlice';
 
 const RemoveChannelModal = ({ show, handleClose, channelId }) => {
@@ -10,6 +11,7 @@ const RemoveChannelModal = ({ show, handleClose, channelId }) => {
 
   const handleRemove = async () => {
     await dispatch(removeChannelThunk(channelId));
+    toast.success(t('chat.channel.delete.success'));
     handleClose();
   };
 

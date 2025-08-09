@@ -5,6 +5,7 @@ import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
 import {channelsSelectors, renameChannel } from '../slices/channelsSlice'
 
 const RenameChannelModal = ({ show, handleClose, channelId }) => {
@@ -51,9 +52,11 @@ const RenameChannelModal = ({ show, handleClose, channelId }) => {
                 }
             )
             dispatch(renameChannel({ id: channelId, changes: { name: values.name.trim() } }))
+            toast.success(t('chat.channel.rename.success'));
             handleClose()
         } catch {
-            setErrors({ name: t('error.channel.rename') })
+          toast.error(t('error.channel.rename'))
+          setErrors({ name: t('error.channel.rename') })
         } finally {
             setSubmitting(false)
         }

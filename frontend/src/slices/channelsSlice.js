@@ -1,6 +1,8 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { t } from 'i18next';
+import { handleApiError } from '../utils/errorHandler';
+import { cleanProfanity } from '../utils/profanityFilter';
 import { fetchMessages } from './messagesSlice';
 
 const channelAdapter = createEntityAdapter();
@@ -27,6 +29,7 @@ export const fetchChannels = createAsyncThunk(
 
       return response.data;
     } catch (err) {
+      handleApiError(err, t('error.channel.load'));
       return rejectWithValue(err.response?.data || t('error.channel.noload'));
     }
   }
@@ -46,6 +49,7 @@ export const removeChannelThunk = createAsyncThunk(
 
       return channelId;
     } catch (err) {
+      handleApiError(err, t('error.channel.remove'));
       return rejectWithValue(err.response?.data || t('error.channel.remove'));
     }
   }
@@ -55,10 +59,31 @@ const channelSlice = createSlice({
     name: 'channels',
     initialState,
     reducers: {
-        setAllChannels: channelAdapter.setAll,
-        addChannel: channelAdapter.addOne,
+        setAllChannels: (state, action) => {
+            const cleanedChannels = action.payload.map(channel => ({
+                ...channel,
+                name: cleanProfanity(channel.name)
+            }));
+            channelAdapter.setAll(state, cleanedChannels);
+        },
+        addChannel: (state, action) => {
+            const cleanedChannel = {
+                ...action.payload,
+                name: cleanProfanity(action.payload.name)
+            };
+            channelAdapter.addOne(state, cleanedChannel);
+        },
         removeChannel: channelAdapter.removeOne,
-        renameChannel: channelAdapter.updateOne,
+        renameChannel: (state, action) => {
+            const cleanedUpdate = {
+                ...action.payload,
+                changes: {
+                    ...action.payload.changes,
+                    name: cleanProfanity(action.payload.changes.name)
+                }
+            };
+            channelAdapter.updateOne(state, cleanedUpdate);
+        },
         setCurrentChannelID(state, action) {
             state.currentChannelId = action.payload
         }

@@ -57,6 +57,9 @@ const resources = {
     'chat.channel.placeholder': 'имя канала',
     'chat.channel.cancel': 'Отмена',
     'chat.channel.submit': 'Создать',
+    'chat.channel.create.success': 'Канал успешно создан!',
+    'chat.channel.delete.success': 'Канал успешно удален!',
+    'chat.channel.rename.success': 'Канал успешно переименован!',
 
       // Модальные окна
       'modal.addChannel.title': 'Новый канал',
@@ -79,7 +82,19 @@ const resources = {
       // Страницы
       'page.notFound': 'Страница не найдена',
       'page.notFound.text': 'Вы можете перейти на главную страницу',
-      'page.notFound.link': 'На главную'
+      'page.notFound.link': 'На главную',
+
+      //Сетевые ошибки
+      'error.network.offline': 'Нет подключения к интернету',
+    'error.network.connection': 'Ошибка подключения к серверу',
+    'error.auth.unauthorized': 'Ошибка авторизации. Пожалуйста, войдите снова',
+    'error.auth.forbidden': 'Доступ запрещен',
+    'error.api.notFound': 'Ресурс не найден',
+    'error.api.server': 'Ошибка сервера. Попробуйте позже',
+    'error.api.general': 'Произошла ошибка. Попробуйте позже',
+    'error.socket.connection': 'Ошибка соединения. Переподключение...',
+    'error.channel.load': 'Ошибка загрузки каналов',
+    'error.messages.load': 'Ошибка загрузки сообщений',
     }
   }
 };

@@ -2,6 +2,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import PATHS from './routes.js'
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import LoginPage from './pages/login.jsx'
 import SignupPage from './pages/signup.jsx'
 import MainPage from './pages/main.jsx'
@@ -17,6 +20,17 @@ function App() {
   return (
     <BrowserRouter>
       <Header />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Routes>
         <Route 
         path={PATHS.MAIN} 

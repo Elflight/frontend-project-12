@@ -5,6 +5,7 @@ import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
 import { addChannel, setCurrentChannelID, channelsSelectors } from '../slices/channelsSlice'
 
 const AddChannelModal = ({ show, handleClose }) => {
@@ -40,9 +41,11 @@ const AddChannelModal = ({ show, handleClose }) => {
             )
             dispatch(addChannel(response.data))
             dispatch(setCurrentChannelID(response.data.id))
+            toast.success(t('chat.channel.create.success'));
             handleClose()
         } catch {
-            setErrors({ name: t('error.channel.create') })
+          toast.error(t('error.channel.create'))
+          setErrors({ name: t('error.channel.create') })
         } finally {
             setSubmitting(false)
         }

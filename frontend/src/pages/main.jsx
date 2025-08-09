@@ -9,6 +9,7 @@ import { Container, Row, Col, Button, Card, ListGroup, Form, Dropdown } from 're
 import axios from 'axios'
 import socket from '../socket'
 import { useTranslation } from 'react-i18next'
+import { handleSocketError } from '../utils/errorHandler';
 
 import AddChannelModal from '../components/AddChannelModal'
 import RemoveChannelModal from '../components/RemoveChannelModal'
@@ -58,10 +59,28 @@ const MainPage = () => {
       dispatch(addMessage(msg));
     });
 
+    socket.on('connect_error', (error) => {
+      handleSocketError(error);
+    });
+
+    socket.on('disconnect', (reason) => {
+      if (reason === 'io server disconnect') {
+        // Сервер закрыл соединение
+        handleSocketError(t('socket.disconnected'));
+      } else {
+        // Попытка переподключения
+        handleSocketError(t('socket.reconnecting'));
+      }
+    });
+
     return () => {
       socket.off('newMessage'); // важно очищать
+      socket.off('connect_error');
+      socket.off('disconnect');
     };
   }, [dispatch]);
+
+  
 
   const channels = useSelector(channelsSelectors.selectAll);
   const currentChannel = useSelector(selectCurrentChannel);
