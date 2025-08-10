@@ -65,6 +65,7 @@ const AddChannelModal = ({ show, handleClose }) => {
           <FormikForm>
             <Modal.Body>
               <Form.Group>
+                <Form.Label htmlFor="name" className="fw-bold">{t('chat.channel.placeholder')}</Form.Label>
                 <Field
                   name="name"
                   as={Form.Control}
