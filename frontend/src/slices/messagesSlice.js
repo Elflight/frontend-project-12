@@ -24,7 +24,8 @@ export const fetchMessages = createAsyncThunk(
       })
       console.log(response)
       return response.data
-    } catch (err) {
+    }
+    catch (err) {
       handleApiError(err, t('error.message.noload'))
       return rejectWithValue(err.response?.data || t('error.message.noload'))
     }
@@ -72,14 +73,14 @@ const messageSlice = createSlice({
       .addCase(removeChannelThunk.fulfilled, (state, action) => {
         const removedChannelId = action.payload
         const messagesToRemove = Object.values(state.entities)
-          .filter((message) => message.channelId === removedChannelId)
-          .map((message) => message.id)
+          .filter(message => message.channelId === removedChannelId)
+          .map(message => message.id)
         messagesAdapter.removeMany(state, messagesToRemove)
       })
   },
 })
 
-//редьюсеры
+// редьюсеры
 export const {
   setAllMessages,
   addMessage,
@@ -87,11 +88,10 @@ export const {
 
 export default messageSlice.reducer
 
-//селекторы
-export const messagesSelectors = messagesAdapter.getSelectors((state)=>state.messages)
+// селекторы
+export const messagesSelectors = messagesAdapter.getSelectors(state => state.messages)
 
-export const selectMessagesByChannelId = (channelId) => (state) =>
+export const selectMessagesByChannelId = channelId => state =>
   messagesSelectors
     .selectAll(state)
-    .filter((message) => message.channelId === channelId)
-
+    .filter(message => message.channelId === channelId)

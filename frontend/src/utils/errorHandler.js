@@ -6,7 +6,8 @@ export const handleApiError = (error, defaultMessage) => {
   if (!error.response) {
     if (!navigator.onLine) {
       toast.error(i18n.t('error.network.offline'))
-    } else {
+    }
+    else {
       toast.error(i18n.t('error.network.connection'))
     }
     return

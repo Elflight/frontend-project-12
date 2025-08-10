@@ -28,7 +28,8 @@ export const fetchChannels = createAsyncThunk(
       dispatch(fetchMessages())
 
       return response.data
-    } catch (err) {
+    }
+    catch (err) {
       handleApiError(err, t('error.channel.load'))
       return rejectWithValue(err.response?.data || t('error.channel.noload'))
     }
@@ -48,7 +49,8 @@ export const removeChannelThunk = createAsyncThunk(
       })
 
       return channelId
-    } catch (err) {
+    }
+    catch (err) {
       handleApiError(err, t('error.channel.remove'))
       return rejectWithValue(err.response?.data || t('error.channel.remove'))
     }
@@ -117,7 +119,7 @@ const channelSlice = createSlice({
   },
 })
 
-//редьюсеры
+// редьюсеры
 export const {
   setAllChannels,
   addChannel,
@@ -128,8 +130,8 @@ export const {
 
 export default channelSlice.reducer
 
-//селекторы
-export const channelsSelectors = channelAdapter.getSelectors((state)=>state.channels)
+// селекторы
+export const channelsSelectors = channelAdapter.getSelectors(state => state.channels)
 
 export const selectCurrentChannel = (state) => {
   const id = state.channels.currentChannelId

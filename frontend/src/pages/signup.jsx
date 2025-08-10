@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -53,15 +53,18 @@ const SignupPage = () => {
         // После успешной регистрации - логиним пользователя и редиректим на чат
         dispatch(login(response.data))
         navigate('/')
-      } catch (error) {
+      }
+      catch (error) {
         if (error.response?.status === 409) {
           setSignupError(t('signup.error.exists'))
           rollbar.error(t('signup.error.exists'))
-        } else {
+        }
+        else {
           setSignupError(t('signup.error.general'))
           rollbar.error(t('signup.error.general'))
         }
-      } finally {
+      }
+      finally {
         setSubmitting(false)
       }
     },
@@ -137,7 +140,10 @@ const SignupPage = () => {
                 </Button>
 
                 <div className="mt-3 text-center">
-                  <span>{t('signup.hasAccount')} </span>
+                  <span>
+                    {t('signup.hasAccount')}
+                    {' '}
+                  </span>
                   <Link to="/login">{t('signup.loginLink')}</Link>
                 </div>
               </Form>

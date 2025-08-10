@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useFormik } from 'formik'
 import { useDispatch } from 'react-redux'
@@ -32,10 +32,12 @@ const LoginPage = () => {
         const response = await axios.post('/api/v1/login', values)
         dispatch(login(response.data))
         navigate('/')
-      } catch {
+      }
+      catch {
         setAuthError(t('login.error'))
         rollbar.error(t('login.error'))
-      } finally {
+      }
+      finally {
         setSubmitting(false)
       }
     },
@@ -86,7 +88,10 @@ const LoginPage = () => {
                 </Button>
 
                 <div className="mt-3 text-center">
-                  <span>{t('login.noAccount')} </span>
+                  <span>
+                    {t('login.noAccount')}
+                    {' '}
+                  </span>
                   <Link to="/signup">{t('login.signupLink')}</Link>
                 </div>
               </Form>

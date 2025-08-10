@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Modal, Button, Form } from 'react-bootstrap'
 import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik'
@@ -11,8 +11,8 @@ import { addChannel, setCurrentChannelID, channelsSelectors } from '../slices/ch
 const AddChannelModal = ({ show, handleClose }) => {
   const dispatch = useDispatch()
   const inputRef = useRef(null)
-  const token = useSelector((state) => state.auth.token)
-  const existingNames = useSelector(channelsSelectors.selectAll).map((ch) => ch.name)
+  const token = useSelector(state => state.auth.token)
+  const existingNames = useSelector(channelsSelectors.selectAll).map(ch => ch.name)
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -43,10 +43,12 @@ const AddChannelModal = ({ show, handleClose }) => {
       dispatch(setCurrentChannelID(response.data.id))
       toast.success(t('chat.channel.create.success'))
       handleClose()
-    } catch {
+    }
+    catch {
       toast.error(t('error.channel.create'))
       setErrors({ name: t('error.channel.create') })
-    } finally {
+    }
+    finally {
       setSubmitting(false)
     }
   }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Modal, Button, Form } from 'react-bootstrap'
 import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik'
@@ -11,12 +11,12 @@ import { channelsSelectors, renameChannel } from '../slices/channelsSlice'
 const RenameChannelModal = ({ show, handleClose, channelId }) => {
   const dispatch = useDispatch()
   const inputRef = useRef(null)
-  const token = useSelector((state) => state.auth.token)
-  const existingNames = useSelector(channelsSelectors.selectAll).map((ch) => ch.name)
+  const token = useSelector(state => state.auth.token)
+  const existingNames = useSelector(channelsSelectors.selectAll).map(ch => ch.name)
   const { t } = useTranslation()
 
   // Находим текущий канал (может быть null)
-  const currentChannel = useSelector(channelsSelectors.selectAll).find((ch) => ch.id === channelId)
+  const currentChannel = useSelector(channelsSelectors.selectAll).find(ch => ch.id === channelId)
 
   useEffect(() => {
     if (show && inputRef.current) {
@@ -54,10 +54,12 @@ const RenameChannelModal = ({ show, handleClose, channelId }) => {
       dispatch(renameChannel({ id: channelId, changes: { name: values.name.trim() } }))
       toast.success(t('chat.channel.rename.success'))
       handleClose()
-    } catch {
+    }
+    catch {
       toast.error(t('error.channel.rename'))
       setErrors({ name: t('error.channel.rename') })
-    } finally {
+    }
+    finally {
       setSubmitting(false)
     }
   }

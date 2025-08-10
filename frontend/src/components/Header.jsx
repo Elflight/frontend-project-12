@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../slices/authSlice'
@@ -12,7 +11,7 @@ import Button from 'react-bootstrap/Button'
 const Header = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const isAuthorized = useSelector((state) => state.auth.isAuthorized)
+  const isAuthorized = useSelector(state => state.auth.isAuthorized)
   const { t } = useTranslation()
 
   const handleLogout = () => {

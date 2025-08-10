@@ -44,25 +44,28 @@ const App = () => {
             <Routes>
               <Route
                 path={PATHS.MAIN}
-                element={
+                element={(
                   <ProtectedRoute>
                     <MainPage />
                   </ProtectedRoute>
-                } />
+                )}
+              />
               <Route
                 path={PATHS.LOGIN}
-                element={
+                element={(
                   <GuestRoute>
                     <LoginPage />
                   </GuestRoute>
-                } />
+                )}
+              />
               <Route
                 path={PATHS.SIGNUP}
-                element={
+                element={(
                   <GuestRoute>
                     <SignupPage />
                   </GuestRoute>
-                } />
+                )}
+              />
               <Route path="*" element={<NotfoundPage />} />
             </Routes>
           </BrowserRouter>

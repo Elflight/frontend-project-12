@@ -85,7 +85,7 @@ const resources = {
       'page.notFound.text': 'Вы можете перейти на главную страницу',
       'page.notFound.link': 'На главную',
 
-      //Сетевые ошибки
+      // Сетевые ошибки
       'error.network.offline': 'Нет подключения к интернету',
       'error.network.connection': 'Ошибка подключения к серверу',
       'error.auth.unauthorized': 'Ошибка авторизации. Пожалуйста, войдите снова',

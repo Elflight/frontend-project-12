@@ -1,11 +1,10 @@
-import React from 'react'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchChannels } from '../slices/channelsSlice'
 import { channelsSelectors } from '../slices/channelsSlice'
 import { messagesSelectors, addMessage } from '../slices/messagesSlice'
 import { setCurrentChannelID, selectCurrentChannel } from '../slices/channelsSlice'
-import { Container, Row, Col, Button, Card, ListGroup, Form, Dropdown } from 'react-bootstrap'
+import { Container, Row, Col, Button, ListGroup, Form, Dropdown } from 'react-bootstrap'
 import axios from 'axios'
 import socket from '../socket'
 import { useTranslation } from 'react-i18next'
@@ -66,7 +65,8 @@ const MainPage = () => {
       if (reason === 'io server disconnect') {
         // Сервер закрыл соединение
         handleSocketError(t('socket.disconnected'))
-      } else {
+      }
+      else {
         // Попытка переподключения
         handleSocketError(t('socket.reconnecting'))
       }
@@ -81,13 +81,13 @@ const MainPage = () => {
 
   const channels = useSelector(channelsSelectors.selectAll)
   const currentChannel = useSelector(selectCurrentChannel)
-  const currentChannelId = useSelector((state) => state.channels.currentChannelId)
+  const currentChannelId = useSelector(state => state.channels.currentChannelId)
 
   const messages = useSelector(messagesSelectors.selectAll)
-    .filter((m) => m.channelId === currentChannelId)
+    .filter(m => m.channelId === currentChannelId)
 
-  const token = useSelector((state) => state.auth.token)
-  const username = useSelector((state) => state.auth.username)
+  const token = useSelector(state => state.auth.token)
+  const username = useSelector(state => state.auth.username)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -107,9 +107,11 @@ const MainPage = () => {
         },
       })
       setMessage('')
-    } catch (err) {
+    }
+    catch (err) {
       console.error(t('error.message.send'), err)
-    } finally {
+    }
+    finally {
       setSending(false)
     }
   }
@@ -129,7 +131,7 @@ const MainPage = () => {
               <Button variant="outline-primary" size="sm" onClick={() => setShowAddModal(true)}>{t('chat.addChannel')}</Button>
             </div>
 
-            <ListGroup key={`channels-list-${currentChannelId}`} className='nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block'>
+            <ListGroup key={`channels-list-${currentChannelId}`} className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
               {channels.map((channel) => {
               // console.log(`Rendering channel:`, channel.name, 'id:', channel.id, '=== current:', currentChannelId, channel.id === currentChannelId);
                 return (
@@ -140,9 +142,12 @@ const MainPage = () => {
                     action
                     onClick={() => dispatch(setCurrentChannelID(channel.id))}
                   >
-                    <span className="me-2">#{channel.name}</span>
+                    <span className="me-2">
+                      #
+                      {channel.name}
+                    </span>
                     {channel.removable && (
-                      <Dropdown onClick={(e) => e.stopPropagation()} align="end">
+                      <Dropdown onClick={e => e.stopPropagation()} align="end">
                         <Dropdown.Toggle
                           split
                           variant="light"
@@ -171,26 +176,31 @@ const MainPage = () => {
           <Col className="p-0 h-100">
             <div className="d-flex flex-column h-100">
               <div className="bg-light mb-4 p-3 shadow-sm small">
-                <h5 className='m-0'>#{currentChannel?.name}</h5>
+                <h5 className="m-0">
+                  #
+                  {currentChannel?.name}
+                </h5>
                 <span className="text-muted">{t('chat.messages.count', { count: messages.length })}</span>
               </div>
 
               <div className="chat-messages overflow-auto px-5">
-                {messages.map((msg) => (
+                {messages.map(msg => (
                   <div key={msg.id} className="mb-2 text-break">
-                    <b>{msg.username}</b>: {msg.body}
+                    <b>{msg.username}</b>
+                    :
+                    {msg.body}
                   </div>
                 ))}
               </div>
 
-              <div className='mt-auto px-5 py-3'>
+              <div className="mt-auto px-5 py-3">
                 <Form onSubmit={handleSubmit}>
                   <Form.Group className="d-flex">
                     <Form.Control
                       type="text"
                       placeholder={t('chat.message.placeholder')}
                       value={message}
-                      onChange={(e) => setMessage(e.target.value)}
+                      onChange={e => setMessage(e.target.value)}
                       disabled={sending}
                       aria-label={t('chat.message.aria')}
                     />
