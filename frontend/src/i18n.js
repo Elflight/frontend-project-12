@@ -35,8 +35,8 @@ const resources = {
 
       // Валидация форм
       'validation.required': 'Обязательное поле',
-      'validation.username.min': 'Имя пользователя должно быть не менее 3 символов',
-      'validation.username.max': 'Имя пользователя должно быть не более 20 символов',
+      'validation.username.min': 'От 3 до 20 символов',
+      'validation.username.max': 'От 3 до 20 символов',
       'validation.password.min': 'Не менее 6 символов',
       'validation.passwords.match': 'Пароли должны совпадать',
       'validation.channel': 'От 3 до 20 символов',
@@ -53,6 +53,7 @@ const resources = {
       'chat.messages.count_many': '{{count}} сообщений',
       'chat.messages.count_other': '{{count}} сообщений',
       'chat.message.placeholder': 'Введите сообщение...',
+      'chat.message.aria': 'Новое сообщение',
       'chat.message.send': '➤',
       'chat.channel.placeholder': 'Имя канала',
       'chat.channel.cancel': 'Отмена',

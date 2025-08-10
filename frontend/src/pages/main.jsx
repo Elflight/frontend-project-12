@@ -194,6 +194,7 @@ const MainPage = () => {
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       disabled={sending}
+                      aria-label={t('chat.message.aria')}
                     />
                     <Button type="submit" variant="primary" className="ms-2" disabled={sending}>
                       {t('chat.message.send')}

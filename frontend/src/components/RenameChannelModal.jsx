@@ -77,6 +77,7 @@ const RenameChannelModal = ({ show, handleClose, channelId }) => {
           <FormikForm>
             <Modal.Body>
               <Form.Group>
+                <Form.Label className="visually-hidden">{t('chat.channel.placeholder')}</Form.Label>
                 <Field
                   name="name"
                   as={Form.Control}
