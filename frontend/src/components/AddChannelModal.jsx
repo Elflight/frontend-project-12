@@ -68,6 +68,7 @@ const AddChannelModal = ({ show, handleClose }) => {
                 <Form.Label htmlFor="name" className="fw-bold">{t('chat.channel.placeholder')}</Form.Label>
                 <Field
                   name="name"
+                  id="name"
                   as={Form.Control}
                   placeholder={t('chat.channel.placeholder')}
                   ref={inputRef}
