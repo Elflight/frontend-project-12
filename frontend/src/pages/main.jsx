@@ -144,10 +144,8 @@ const MainPage = () => {
                     {channel.removable && (
                       <Dropdown onClick={(e) => e.stopPropagation()} align="end">
                         <Dropdown.Toggle
-                          as="span"
+                          split
                           variant="light"
-                          size="sm"
-                          className="p-0 border-0 bg-transparent"
                           id={`dropdown-${channel.id}`}
                         >
                           <span className="visually-hidden">{t('chat.channel.actions')}</span>
