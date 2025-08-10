@@ -130,7 +130,8 @@ const SignupPage = () => {
                   variant="primary"
                   type="submit"
                   className="w-100"
-                  disabled={formik.isSubmitting || !formik.isValid}
+                  // disabled={formik.isSubmitting || !formik.isValid}
+                  disabled={formik.isSubmitting}
                 >
                   {t('signup.submit')}
                 </Button>
