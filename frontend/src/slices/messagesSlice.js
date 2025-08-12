@@ -17,7 +17,7 @@ export const fetchMessages = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.token
-      const messagesData = messagesService.fetchMessages(token)
+      const messagesData = await messagesService.fetchMessages(token)
 
       return messagesData
     }

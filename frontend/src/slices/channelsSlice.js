@@ -38,7 +38,7 @@ export const removeChannelThunk = createAsyncThunk(
     const token = getState().auth.token
 
     try {
-      channelsService.deleteChannel(channelId, token)
+      await channelsService.deleteChannel(channelId, token)
 
       return channelId
     }

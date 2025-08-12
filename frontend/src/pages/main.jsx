@@ -91,7 +91,7 @@ const MainPage = () => {
   const currentChannelId = useSelector(state => state.channels.currentChannelId)
 
   const messages = useSelector(messagesSelectors.selectAll)
-    .filter(m => m.channelId === currentChannelId)
+    .filter(m => Number(m.channelId) === Number(currentChannelId))
 
   const token = useSelector(state => state.auth.token)
   const username = useSelector(state => state.auth.username)
@@ -147,36 +147,48 @@ const MainPage = () => {
               // console.log(`Rendering channel:`, channel.name, 'id:', channel.id, '=== current:', currentChannelId, channel.id === currentChannelId);
                 return (
                   <ListGroup.Item
-                    className="d-flex justify-content-between align-items-center text-break"
                     key={channel.id}
+                    as="li"
+                    className="nav-item w-100"
                     active={Number(channel.id) === Number(currentChannelId)}
-                    action
-                    onClick={() => dispatch(setCurrentChannelID(channel.id))}
                   >
-                    <span className="me-2">
-                      #
-                      {channel.name}
-                    </span>
-                    {channel.removable && (
-                      <Dropdown onClick={e => e.stopPropagation()} align="end">
-                        <Dropdown.Toggle
-                          split
-                          variant="light"
-                          id={`dropdown-${channel.id}`}
-                        >
-                          <span className="visually-hidden">{t('chat.channel.actions')}</span>
-                        </Dropdown.Toggle>
+                    <div role="group" className="d-flex dropdown btn-group">
+                      <button
+                        type="button"
+                        className={`w-100 rounded-0 text-start text-truncate btn `}
+                        onClick={() => dispatch(setCurrentChannelID(channel.id))}
+                      >
+                        <span className="me-1">#</span>
+                        {channel.name}
+                      </button>
 
-                        <Dropdown.Menu>
-                          <Dropdown.Item onClick={() => openRenameModal(channel.id)}>
-                            {t('chat.channel.rename')}
-                          </Dropdown.Item>
-                          <Dropdown.Item onClick={() => openRemoveModal(channel.id)}>
-                            {t('chat.channel.remove')}
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    )}
+                      {channel.removable && (
+                        <Dropdown
+                          onClick={e => e.stopPropagation()}
+                          align="end"
+                        >
+                          <Dropdown.Toggle
+                            as="button"
+                            type="button"
+                            split
+                            variant="primary"
+                            id={`dropdown-${channel.id}`}
+                            className="flex-grow-0 dropdown-toggle dropdown-toggle-split"
+                          >
+                            <span className="visually-hidden">{t('chat.channel.actions')}</span>
+                          </Dropdown.Toggle>
+
+                          <Dropdown.Menu>
+                            <Dropdown.Item onClick={() => openRenameModal(channel.id)}>
+                              {t('chat.channel.rename')}
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => openRemoveModal(channel.id)}>
+                              {t('chat.channel.remove')}
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      )}
+                    </div>
                   </ListGroup.Item>
                 )
               })}
