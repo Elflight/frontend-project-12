@@ -6,6 +6,7 @@ import { login } from '../slices/authSlice'
 import axios from 'axios'
 import { useTranslation } from 'react-i18next'
 import { useRollbar } from '@rollbar/react'
+import API from '../apiRoutes.js'
 
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -29,7 +30,7 @@ const LoginPage = () => {
     },
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const response = await axios.post('/api/v1/login', values)
+        const response = await axios.post(API.LOGIN, values)
         dispatch(login(response.data))
         navigate('/')
       }

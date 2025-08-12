@@ -7,6 +7,7 @@ import axios from 'axios'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { channelsSelectors, renameChannel } from '../slices/channelsSlice'
+import API from '../apiRoutes.js'
 
 const RenameChannelModal = ({ show, handleClose, channelId }) => {
   const dispatch = useDispatch()
@@ -45,7 +46,7 @@ const RenameChannelModal = ({ show, handleClose, channelId }) => {
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
       await axios.patch(
-        `/api/v1/channels/${channelId}`,
+        `${API.CHANNELS}/${channelId}`,
         { name: values.name.trim() },
         {
           headers: { Authorization: `Bearer ${token}` },

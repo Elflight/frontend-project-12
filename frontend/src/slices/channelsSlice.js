@@ -4,6 +4,7 @@ import { t } from 'i18next'
 import { handleApiError } from '../utils/errorHandler'
 import { cleanProfanity } from '../utils/profanityFilter'
 import { fetchMessages } from './messagesSlice'
+import API from '../apiRoutes.js'
 
 const channelAdapter = createEntityAdapter()
 
@@ -18,7 +19,7 @@ export const fetchChannels = createAsyncThunk(
   async (_, { dispatch, getState, rejectWithValue }) => {
     try {
       const token = getState().auth.token
-      const response = await axios.get('/api/v1/channels', {
+      const response = await axios.get(API.CHANNELS, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -42,7 +43,7 @@ export const removeChannelThunk = createAsyncThunk(
     const token = getState().auth.token
 
     try {
-      await axios.delete(`/api/v1/channels/${channelId}`, {
+      await axios.delete(`${API.CHANNELS}/${channelId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

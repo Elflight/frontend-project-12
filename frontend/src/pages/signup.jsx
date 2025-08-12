@@ -7,6 +7,7 @@ import { login } from '../slices/authSlice'
 import axios from 'axios'
 import { useTranslation } from 'react-i18next'
 import { useRollbar } from '@rollbar/react'
+import API from '../apiRoutes.js'
 
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -46,7 +47,7 @@ const SignupPage = () => {
     onSubmit: async (values, { setSubmitting }) => {
       try {
         setSignupError(null)
-        const response = await axios.post('/api/v1/signup', {
+        const response = await axios.post(API.SIGNUP, {
           username: values.username,
           password: values.password,
         })

@@ -7,6 +7,7 @@ import axios from 'axios'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { addChannel, setCurrentChannelID, channelsSelectors } from '../slices/channelsSlice'
+import API from '../apiRoutes.js'
 
 const AddChannelModal = ({ show, handleClose }) => {
   const dispatch = useDispatch()
@@ -33,7 +34,7 @@ const AddChannelModal = ({ show, handleClose }) => {
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
       const response = await axios.post(
-        '/api/v1/channels',
+        API.CHANNELS,
         { name: values.name.trim() },
         {
           headers: { Authorization: `Bearer ${token}` },

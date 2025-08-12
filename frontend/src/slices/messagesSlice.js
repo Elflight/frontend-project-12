@@ -4,6 +4,7 @@ import { t } from 'i18next'
 import { handleApiError } from '../utils/errorHandler'
 import { cleanProfanity } from '../utils/profanityFilter'
 import { removeChannelThunk } from './channelsSlice'
+import API from '../apiRoutes.js'
 
 const messagesAdapter = createEntityAdapter()
 
@@ -17,7 +18,7 @@ export const fetchMessages = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.token
-      const response = await axios.get('/api/v1/messages', {
+      const response = await axios.get(API.MESSAGES, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
