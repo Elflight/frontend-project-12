@@ -4,10 +4,9 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useDispatch } from 'react-redux'
 import { login } from '../slices/authSlice'
-import axios from 'axios'
 import { useTranslation } from 'react-i18next'
 import { useRollbar } from '@rollbar/react'
-import API from '../apiRoutes.js'
+import { authService } from '../utils/apiClient'
 
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -47,12 +46,12 @@ const SignupPage = () => {
     onSubmit: async (values, { setSubmitting }) => {
       try {
         setSignupError(null)
-        const response = await axios.post(API.SIGNUP, {
+        const userData = await authService.signup({
           username: values.username,
           password: values.password,
         })
         // После успешной регистрации - логиним пользователя и редиректим на чат
-        dispatch(login(response.data))
+        dispatch(login(userData))
         navigate('/')
       }
       catch (error) {

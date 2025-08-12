@@ -3,10 +3,9 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useFormik } from 'formik'
 import { useDispatch } from 'react-redux'
 import { login } from '../slices/authSlice'
-import axios from 'axios'
 import { useTranslation } from 'react-i18next'
 import { useRollbar } from '@rollbar/react'
-import API from '../apiRoutes.js'
+import { authService } from '../utils/apiClient'
 
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -30,8 +29,8 @@ const LoginPage = () => {
     },
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const response = await axios.post(API.LOGIN, values)
-        dispatch(login(response.data))
+        const userData = await authService.login(values)
+        dispatch(login(userData))
         navigate('/')
       }
       catch {

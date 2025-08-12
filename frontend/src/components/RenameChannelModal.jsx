@@ -3,11 +3,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Modal, Button, Form } from 'react-bootstrap'
 import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
-import axios from 'axios'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { channelsSelectors, renameChannel } from '../slices/channelsSlice'
-import API from '../apiRoutes.js'
+import { channelsService } from '../utils/apiClient'
 
 const RenameChannelModal = ({ show, handleClose, channelId }) => {
   const dispatch = useDispatch()
@@ -45,13 +44,7 @@ const RenameChannelModal = ({ show, handleClose, channelId }) => {
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
-      await axios.patch(
-        `${API.CHANNELS}/${channelId}`,
-        { name: values.name.trim() },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      )
+      await channelsService.renameChannel(channelId, { name: values.name.trim() }, token)
       dispatch(renameChannel({ id: channelId, changes: { name: values.name.trim() } }))
       toast.success(t('chat.channel.rename.success'))
       handleClose()

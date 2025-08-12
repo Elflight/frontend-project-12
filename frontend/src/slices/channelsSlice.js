@@ -1,10 +1,9 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
 import { t } from 'i18next'
 import { handleApiError } from '../utils/errorHandler'
 import { cleanProfanity } from '../utils/profanityFilter'
 import { fetchMessages } from './messagesSlice'
-import API from '../apiRoutes.js'
+import { channelsService } from '../utils/apiClient'
 
 const channelAdapter = createEntityAdapter()
 
@@ -19,16 +18,12 @@ export const fetchChannels = createAsyncThunk(
   async (_, { dispatch, getState, rejectWithValue }) => {
     try {
       const token = getState().auth.token
-      const response = await axios.get(API.CHANNELS, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const channelsData = channelsService.fetchChannels(token)
 
       // После получения каналов — загружаем сообщения
       dispatch(fetchMessages())
 
-      return response.data
+      return channelsData
     }
     catch (err) {
       handleApiError(err, t('error.channel.load'))
@@ -43,11 +38,7 @@ export const removeChannelThunk = createAsyncThunk(
     const token = getState().auth.token
 
     try {
-      await axios.delete(`${API.CHANNELS}/${channelId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      channelsService.deleteChannel(channelId, token)
 
       return channelId
     }

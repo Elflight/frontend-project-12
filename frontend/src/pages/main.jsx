@@ -5,11 +5,10 @@ import { channelsSelectors } from '../slices/channelsSlice'
 import { messagesSelectors, addMessage } from '../slices/messagesSlice'
 import { setCurrentChannelID, selectCurrentChannel } from '../slices/channelsSlice'
 import { Container, Row, Col, Button, ListGroup, Form, Dropdown } from 'react-bootstrap'
-import axios from 'axios'
 import socket from '../socket'
 import { useTranslation } from 'react-i18next'
 import { handleSocketError } from '../utils/errorHandler'
-import API from '../apiRoutes.js'
+import { messagesService } from '../utils/apiClient'
 
 import AddChannelModal from '../components/AddChannelModal'
 import RemoveChannelModal from '../components/RemoveChannelModal'
@@ -113,11 +112,8 @@ const MainPage = () => {
 
     try {
       setSending(true)
-      await axios.post(API.MESSAGES, newMessage, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      messagesService.sendMessage(newMessage, token)
+
       setMessage('')
     }
     catch (err) {

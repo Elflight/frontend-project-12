@@ -1,10 +1,9 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
 import { t } from 'i18next'
 import { handleApiError } from '../utils/errorHandler'
 import { cleanProfanity } from '../utils/profanityFilter'
 import { removeChannelThunk } from './channelsSlice'
-import API from '../apiRoutes.js'
+import { messagesService } from '../utils/apiClient'
 
 const messagesAdapter = createEntityAdapter()
 
@@ -18,13 +17,9 @@ export const fetchMessages = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.token
-      const response = await axios.get(API.MESSAGES, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      console.log(response)
-      return response.data
+      const messagesData = messagesService.fetchMessages(token)
+
+      return messagesData
     }
     catch (err) {
       handleApiError(err, t('error.message.noload'))

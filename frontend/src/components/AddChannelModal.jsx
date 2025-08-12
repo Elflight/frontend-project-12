@@ -3,11 +3,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Modal, Button, Form } from 'react-bootstrap'
 import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
-import axios from 'axios'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { addChannel, setCurrentChannelID, channelsSelectors } from '../slices/channelsSlice'
-import API from '../apiRoutes.js'
+import { channelsService } from '../utils/apiClient'
 
 const AddChannelModal = ({ show, handleClose }) => {
   const dispatch = useDispatch()
@@ -33,15 +32,9 @@ const AddChannelModal = ({ show, handleClose }) => {
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
-      const response = await axios.post(
-        API.CHANNELS,
-        { name: values.name.trim() },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      )
-      dispatch(addChannel(response.data))
-      dispatch(setCurrentChannelID(response.data.id))
+      const channelData = await channelsService.createChannel({ name: values.name.trim() }, token)
+      dispatch(addChannel(channelData))
+      dispatch(setCurrentChannelID(channelData.id))
       toast.success(t('chat.channel.create.success'))
       handleClose()
     }
