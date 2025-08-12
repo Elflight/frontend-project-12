@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchChannels } from '../slices/channelsSlice'
 import { channelsSelectors } from '../slices/channelsSlice'
@@ -17,6 +17,9 @@ import RenameChannelModal from '../components/RenameChannelModal'
 const MainPage = () => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
+  const inputRef = useRef(null)
+  const messagesEndRef = useRef(null) // Для скролла к последнему сообщению
+  const chatMessagesRef = useRef(null)
 
   const [message, setMessage] = useState('')
   const [sending, setSending] = useState(false)
@@ -46,6 +49,10 @@ const MainPage = () => {
   const closeRenameModal = () => {
     setChannelToRename(null)
     setShowRenameModal(false)
+  }
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
   useEffect(() => {
@@ -89,6 +96,10 @@ const MainPage = () => {
   const token = useSelector(state => state.auth.token)
   const username = useSelector(state => state.auth.username)
 
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages, currentChannelId]) // Зависимости: сообщения и текущий канал
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!message.trim()) return
@@ -113,6 +124,9 @@ const MainPage = () => {
     }
     finally {
       setSending(false)
+      setTimeout(() => {
+        inputRef.current?.focus()
+      }, 0)
     }
   }
 
@@ -183,7 +197,7 @@ const MainPage = () => {
                 <span className="text-muted">{t('chat.messages.count', { count: messages.length })}</span>
               </div>
 
-              <div className="chat-messages overflow-auto px-5">
+              <div ref={chatMessagesRef} className="chat-messages overflow-auto px-5">
                 {messages.map(msg => (
                   <div key={msg.id} className="mb-2 text-break">
                     <b>{msg.username}</b>
@@ -191,12 +205,14 @@ const MainPage = () => {
                     {msg.body}
                   </div>
                 ))}
+                <div ref={messagesEndRef} />
               </div>
 
               <div className="mt-auto px-5 py-3">
                 <Form onSubmit={handleSubmit}>
                   <Form.Group className="d-flex">
                     <Form.Control
+                      ref={inputRef}
                       type="text"
                       placeholder={t('chat.message.placeholder')}
                       value={message}

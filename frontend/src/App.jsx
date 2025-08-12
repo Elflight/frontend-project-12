@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import LoginPage from './pages/login.jsx'
 import SignupPage from './pages/signup.jsx'
 import MainPage from './pages/main.jsx'
-import NotfoundPage from './pages/notfound.jsx'
+import NotfoundPage from './pages/notFound.jsx'
 
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import GuestRoute from './components/GuestRoute.jsx'

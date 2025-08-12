@@ -63,6 +63,7 @@ const LoginPage = () => {
                     value={formik.values.username}
                     onChange={formik.handleChange}
                     isInvalid={!!authError}
+                    required
                   />
                 </Form.Group>
 
@@ -75,6 +76,7 @@ const LoginPage = () => {
                     value={formik.values.password}
                     onChange={formik.handleChange}
                     isInvalid={!!authError}
+                    required
                   />
                 </Form.Group>
 
